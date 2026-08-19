@@ -1,4 +1,4 @@
-# TorneosElProducto
+# Torneos El Producto
 Proyecto Programacion 1 UADE - Miercoles Manaña
 
 Alumnos:
