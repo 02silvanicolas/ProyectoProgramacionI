@@ -1,5 +1,5 @@
 # Torneos El Producto
-Proyecto Programacion 1 UADE - Miercoles Manaña
+Proyecto Programación 1 UADE - Miércoles Manaña
 
 Alumnos:
 Fabricio Pato - Lautaro Pérez - Martín Saffioti - Nicolás Silva
