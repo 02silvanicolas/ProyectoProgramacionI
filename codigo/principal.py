@@ -1,6 +1,9 @@
-print("Primer programa del Proyecto Integrador"/n)
+
+print("Primer programa del Proyecto Integrador/n")
+
 print("Grupo Torneos El Producto. Alumnos: Nicolas Silva, Perez Lautaro, Martín Saffioti, Fabricio Pato")
 
+import perfil_equipo
 
 def main():
     nombreEquipo = input("Ingrese el nombre del equipo: ")
