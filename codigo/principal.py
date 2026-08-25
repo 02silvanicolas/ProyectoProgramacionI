@@ -1,5 +1,5 @@
 print("Primer programa del Proyecto Integrador"/n)
-print("Grupo Torneos El Producto. Alumnos: Nicolas Silva, Perez Lautaro, Martín Saffioti")
+print("Grupo Torneos El Producto. Alumnos: Nicolas Silva, Perez Lautaro, Martín Saffioti, Fabricio Pato")
 
 
 def main():
