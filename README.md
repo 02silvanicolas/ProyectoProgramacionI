@@ -1,4 +1,4 @@
-# Torneos El Producto
+# Subtexd
 Proyecto Programación 1 UADE - Miércoles Manaña
 
 Alumnos:
