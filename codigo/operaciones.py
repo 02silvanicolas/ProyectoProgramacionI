@@ -18,7 +18,7 @@ def Gestionar_Usuarios(ListaUsuarios):
 
     input("Ingrese una opcion: ")
     match input:
-        case "1": agregar_Usuario(ListaUsuarios)
+        case "1": agregar_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
         case "2": buscar_Usuario(ListaUsuarios) 
 
 def Gestionar_Resenas(ListaUsuarios, MatrizResenas, TuplaLineas):
@@ -64,3 +64,61 @@ def Estadisticas(ListaUsuarios, MatrizResenas, TuplaLineas):
         case "5": lineas_Valoracion_Critica(TuplaLineas, MatrizResenas)
         case "6": ranking_Por_Categoria(TuplaLineas, MatrizResenas)
         case "7": top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas)
+
+def agregar_Usuario(listaUsuarios, matrizResenas, tuplaLineas):
+    usuario = input("Ingrese el nombre de usuario deseado:")
+    codigo = verificarCodigo(usuario, listaUsuarios)
+    if codigo != -1:
+        print("El usuario ya existe. No se puede agregar.")
+    else:
+        listaUsuarios.append(usuario)
+        matrizResenas.append([[] for _ in range(len(tuplaLineas))])
+        print("Usuario agregado exitosamente.")
+
+def buscar_Usuario(listaUsuario):
+    usuario = input("Ingrese el nombre de usuario que desea buscar:")
+    codigo = verificarCodigo(usuario, listaUsuario)
+    if codigo == -1:
+        print("El usuario no existe.")
+    else:
+        print(f"El usuario {usuario} se encuentra en la lista.")
+
+verificarCodigo = lambda buscado, lugar: lugar.index(buscado) if buscado in lugar else -1
+
+def pedirDatos(pedirUsuario, pedirLinea, ListaUsuarios, TuplaLineas):
+
+    devolucion = ()
+    if pedirUsuario:
+        usuario = input("Ingrese el nombre de usuario:")
+        codigo_usuario = verificarCodigo(usuario, ListaUsuarios)
+        while codigo_usuario == -1:
+            print("El usuario no existe.")
+            usuario = input("Ingrese el nombre de usuario:")
+            codigo_usuario = verificarCodigo(usuario, ListaUsuarios)
+        devolucion += (codigo_usuario,)
+    if pedirLinea:
+        linea = input("Ingrese el nombre de la linea:")
+        codigo_linea = verificarCodigo(linea, TuplaLineas)
+        while codigo_linea == -1:
+            print("La linea no existe.")
+            linea = input("Ingrese el nombre de la linea:")
+            codigo_linea = verificarCodigo(linea, TuplaLineas)
+        devolucion += (codigo_linea,)
+
+    return devolucion
+
+def agregar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
+    usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
+    resena = input("Ingrese la resena:")
+    # Aca deberia agregarse la logica para agregar la resena a MatrizResenas
+    print("Resena agregada exitosamente.")
+
+def editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
+    usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
+    # Aca deberia agregarse la logica para editar la resena en MatrizResenas
+    print("Resena editada exitosamente.")
+
+def consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
+    usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
+    # Aca deberia agregarse la logica para consultar la resena en MatrizResenas
+
