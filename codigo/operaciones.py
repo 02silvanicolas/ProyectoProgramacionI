@@ -25,13 +25,13 @@ def Gestionar_Resenas(ListaUsuarios, MatrizResenas, TuplaLineas):
     print("====Gestion de resenas====")
     print("1. Cargar resena")
     print("2. Editar resena")
-    print("3. Consultar resena")
+    #print("3. Consultar resena") Está en el alcance, pero coincide con la opción de Consultas, por lo que se omite para evitar confusión.
 
     input("Ingrese una opcion: ")
     match input:
         case "1": agregar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
         case "2": editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "3": consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
+        #case "3": consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
 
 def Consultas(ListaUsuarios, MatrizResenas, TuplaLineas):
     print("====Consultas====")
@@ -41,9 +41,9 @@ def Consultas(ListaUsuarios, MatrizResenas, TuplaLineas):
 
     input("Ingrese una opcion: ")
     match input:   
-        case "1": consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas)
+        case "1": consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
         case "2": consultar_Resenas_Linea(TuplaLineas, MatrizResenas)
-        case "3": consultar_Resena_Usuario_Linea(ListaUsuarios, TuplaLineas, MatrizResenas)
+        case "3": consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas)
 
 def Estadisticas(ListaUsuarios, MatrizResenas, TuplaLineas):
     print("====Estadisticas====")
@@ -57,8 +57,8 @@ def Estadisticas(ListaUsuarios, MatrizResenas, TuplaLineas):
 
     input("Ingrese una opcion: ")
     match input:
-        case "1": promedio_Satisfaccion(ListaUsuarios, MatrizResenas)
-        case "2": promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas)
+        case "1": promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas)
+        case "2": promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas)
         case "3": lineas_Mas_Limpias(TuplaLineas, MatrizResenas)
         case "4": linea_Mas_Resenas(TuplaLineas, MatrizResenas)
         case "5": lineas_Valoracion_Critica(TuplaLineas, MatrizResenas)
@@ -107,18 +107,99 @@ def pedirDatos(pedirUsuario, pedirLinea, ListaUsuarios, TuplaLineas):
 
     return devolucion
 
+
+
 def agregar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
-    resena = input("Ingrese la resena:")
-    # Aca deberia agregarse la logica para agregar la resena a MatrizResenas
+    resena = ingresar_Resena()
+    agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena)
     print("Resena agregada exitosamente.")
 
 def editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
+    mostrar_Resena = MatrizResenas[usuario][linea]
+    if mostrar_Resena == []:
+        print("No hay resena para editar.")
+        return
+    else:
+        print(f"Resena actual: {mostrar_Resena}")
+        resena = ingresar_Resena()
+        agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena)
     # Aca deberia agregarse la logica para editar la resena en MatrizResenas
     print("Resena editada exitosamente.")
 
-def consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
+
+def ingresar_Resena():
+    resena = []
+
+    while validar_Rango == False:
+        limpieza = int(input("Ingrese la calificacion de Limpieza (1-5): "))
+        validar_Rango = 1 <= limpieza <= 5
+        if not validar_Rango:
+            print("La calificacion debe estar entre 1 y 5. Intente nuevamente.")
+
+    while validar_Rango == False:
+            espera = int(input("Ingrese la calificacion de Espera (1-5): "))
+            validar_Rango = 1 <= espera <= 5
+            if not validar_Rango:
+                print("La calificacion debe estar entre 1 y 5. Intente nuevamente.")
+
+    while validar_Rango == False:
+                ocupacion = int(input("Ingrese la calificacion de Ocupacion (1-5): "))
+                validar_Rango = 1 <= ocupacion <= 5
+                if not validar_Rango:
+                    print("La calificacion debe estar entre 1 y 5. Intente nuevamente.")
+
+    comentario = input("Ingrese un comentario (opcional): ")
+    comentario = comentario.upper()
+    
+    resena.append(limpieza)
+    resena.append(espera)
+    resena.append(ocupacion)
+    resena.append(comentario)
+    return resena
+
+def agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena):
+    MatrizResenas[usuario][linea] = resena
+
+
+
+def consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas):
+    usuario = pedirDatos(True, False, ListaUsuarios, TuplaLineas)
+    # Aca deberia agregarse la logica para consultar las resenas del usuario en MatrizResenas
+
+def consultar_Resenas_Linea(TuplaLineas, MatrizResenas):
+    linea = pedirDatos(False, True, [], TuplaLineas)
+    # Aca deberia agregarse la logica para consultar las resenas de la linea en MatrizResenas
+
+def consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
     # Aca deberia agregarse la logica para consultar la resena en MatrizResenas
 
+def promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas):
+    # Aca deberia agregarse la logica para calcular el promedio de satisfaccion
+    pass
+
+def promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas):
+    # Aca deberia agregarse la logica para calcular el promedio de experiencia del usuario
+    pass
+
+def lineas_Mas_Limpias(TuplaLineas, MatrizResenas):
+    # Aca deberia agregarse la logica para calcular las lineas mas limpias
+    pass
+
+def linea_Mas_Resenas(TuplaLineas, MatrizResenas):
+    # Aca deberia agregarse la logica para calcular la linea con mas resenas
+    pass
+
+def lineas_Valoracion_Critica(TuplaLineas, MatrizResenas):
+    # Aca deberia agregarse la logica para calcular las lineas con valoracion critica
+    pass
+
+def ranking_Por_Categoria(TuplaLineas, MatrizResenas):
+    # Aca deberia agregarse la logica para calcular el ranking por categoria
+    pass
+
+def top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas):
+    # Aca deberia agregarse la logica para calcular el top 3 del ranking por categoria
+    pass
