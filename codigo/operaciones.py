@@ -200,12 +200,55 @@ def consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas):
 
 
 def promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas):
-    # Aca deberia agregarse la logica para calcular el promedio de satisfaccion
-    pass
+    promedios = []
+    for l in range(len(TuplaLineas)):
+        suma = 0
+        cantidad = 0
+        for u in range(len(MatrizResenas)):
+            resena = MatrizResenas[u][l]
+            if resena != []:
+                satisfaccion = (resena[0] + resena[1] + resena[2]) / 3
+                suma += satisfaccion
+                cantidad += 1
+        promedios.append(suma / cantidad if cantidad > 0 else None)
+
+    lineas_con_datos = [(TuplaLineas[i], promedios[i]) for i in range(len(promedios)) if promedios[i] is not None]
+
+    if lineas_con_datos == []:
+        print("No hay resenas cargadas para calcular la satisfaccion.")
+        return
+
+    linea_mayor = max(lineas_con_datos, key=lambda x: x[1])
+    linea_menor = min(lineas_con_datos, key=lambda x: x[1])
+
+    print(f"Linea con mayor satisfaccion: {linea_mayor[0]} (Promedio: {linea_mayor[1]:.2f})")
+    print(f"Linea con menor satisfaccion: {linea_menor[0]} (Promedio: {linea_menor[1]:.2f})")
+
 
 def promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas):
-    # Aca deberia agregarse la logica para calcular el promedio de experiencia del usuario
-    pass
+    promedios = []
+    for u in range(len(ListaUsuarios)):
+        suma = 0
+        cantidad = 0
+        for l in range(len(TuplaLineas)):
+            resena = MatrizResenas[u][l]
+            if resena != []:
+                experiencia = (resena[0] + resena[1] + resena[2]) / 3
+                suma += experiencia
+                cantidad += 1
+        promedios.append(suma / cantidad if cantidad > 0 else None)
+
+    usuarios_con_datos = [(ListaUsuarios[i], promedios[i]) for i in range(len(promedios)) if promedios[i] is not None]
+
+    if usuarios_con_datos == []:
+        print("No hay resenas cargadas para calcular la experiencia de usuario.")
+        return
+
+    usuario_mejor = max(usuarios_con_datos, key=lambda x: x[1])
+    usuario_peor = min(usuarios_con_datos, key=lambda x: x[1])
+
+    print(f"Usuario con mejor experiencia: {usuario_mejor[0]} (Promedio: {usuario_mejor[1]:.2f})")
+    print(f"Usuario con peor experiencia: {usuario_peor[0]} (Promedio: {usuario_peor[1]:.2f})")
 
 def lineas_Mas_Limpias(TuplaLineas, MatrizResenas):
     # Aca deberia agregarse la logica para calcular las lineas mas limpias
