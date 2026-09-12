@@ -166,15 +166,38 @@ def agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena):
 
 def consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario = pedirDatos(True, False, ListaUsuarios, TuplaLineas)
-    # Aca deberia agregarse la logica para consultar las resenas del usuario en MatrizResenas
+    for i in range(len(MatrizResenas[usuario])):
+        if MatrizResenas[usuario][i] != []:
+            print(f"\nReseñas para la línea {TuplaLineas[i]}:")
+            for r in MatrizResenas[usuario][i]:
+                print(f"  Limpieza: {r[0]}, Espera: {r[1]}, Ocupación: {r[2]}, Comentario: {r[3]}")
+        else:
+            print(f"No hay reseñas para la línea {TuplaLineas[i]}.")
+            
 
 def consultar_Resenas_Linea(TuplaLineas, MatrizResenas):
     linea = pedirDatos(False, True, [], TuplaLineas)
-    # Aca deberia agregarse la logica para consultar las resenas de la linea en MatrizResenas
+    print(f"Resenas para la linea {TuplaLineas[linea]}:")
+
+    for u in range(len(MatrizResenas)):
+        if MatrizResenas[u][linea] != []:
+            print(f"\nReseñas de {ListaUsuarios[u]} para la línea {TuplaLineas[linea]}:")
+            for r in MatrizResenas[u][linea]:
+                print(f"  Limpieza: {r[0]}, Espera: {r[1]}, Ocupación: {r[2]}, Comentario: {r[3]}")
+        else:
+            print(f"No hay reseñas de {ListaUsuarios[u]} para la línea {TuplaLineas[linea]}.")
+
 
 def consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
-    # Aca deberia agregarse la logica para consultar la resena en MatrizResenas
+    resena = MatrizResenas[usuario][linea]
+    if resena != []:
+        print("Resenas encontradas:")
+        for r in MatrizResenas[usuario][linea]:
+            print(f"Limpieza: {r[0]}, Espera: {r[1]}, Ocupacion: {r[2]}, Comentario: {r[3]}")
+    else:
+        print(f"No hay resena de {ListaUsuarios[usuario]} para la linea {TuplaLineas[linea]}.")
+
 
 def promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas):
     # Aca deberia agregarse la logica para calcular el promedio de satisfaccion
