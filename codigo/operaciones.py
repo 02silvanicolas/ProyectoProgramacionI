@@ -12,58 +12,99 @@ def Ver_Menu():
     return opcion
 
 def Gestionar_Usuarios(ListaUsuarios):
-    print("====Gestion de usuarios====")
-    print("1. Agregar usuario")
-    print("2. Buscar usuario")
+    opcion=""
+    while opcion!="0":
+        print("====Gestion de usuarios====")
+        print("1. Agregar usuario")
+        print("2. Buscar usuario")
+        print("0. Volver al menu")
 
-    input("Ingrese una opcion: ")
-    match input:
-        case "1": agregar_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "2": buscar_Usuario(ListaUsuarios) 
+        opcion=input("Ingrese una opcion: ")
+        if opcion == "1":
+            agregar_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion == "2":
+            buscar_Usuario(ListaUsuarios)
+        elif opcion=="0":
+            print("Volviendo al menu")
+        else:
+            print("Opción no válida. Intente nuevamente.")
 
 def Gestionar_Resenas(ListaUsuarios, MatrizResenas, TuplaLineas):
-    print("====Gestion de resenas====")
-    print("1. Cargar resena")
-    print("2. Editar resena")
-    #print("3. Consultar resena") Está en el alcance, pero coincide con la opción de Consultas, por lo que se omite para evitar confusión.
+    opcion=""
+    while opcion!="0":
+        print("====Gestion de resenas====")
+        print("1. Cargar resena")
+        print("2. Editar resena")
+        #print("3. Consultar resena") Está en el alcance, pero coincide con la opción de Consultas, por lo que se omite para evitar confusión.
+        print("0. Volver al menu")
 
-    input("Ingrese una opcion: ")
-    match input:
-        case "1": agregar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "2": editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
-        #case "3": consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
+        opcion=input("Ingrese una opcion: ")
+        if opcion == "1":
+            agregar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion == "2":
+            editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion=="0":
+            print("Volviendo al menu")
+        #elif opcion=="3":
+            #consultar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas)
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
 
 def Consultas(ListaUsuarios, MatrizResenas, TuplaLineas):
-    print("====Consultas====")
-    print("1. Consultar resenas por usuario")
-    print("2. Consultar resenas por linea")
-    print("3. Consultar resena de usuario para linea")
+    opcion=""
+    while opcion!="0"
+        print("====Consultas====")
+        print("1. Consultar resenas por usuario")
+        print("2. Consultar resenas por linea")
+        print("3. Consultar resena de usuario para linea")
+        print("0. Volver al menu")
 
-    input("Ingrese una opcion: ")
-    match input:   
-        case "1": consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "2": consultar_Resenas_Linea(TuplaLineas, MatrizResenas)
-        case "3": consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas)
+        opcion=input("Ingrese una opcion: ")
+        if opcion == "1":
+            consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion == "2":
+            consultar_Resenas_Linea(TuplaLineas, MatrizResenas)
+        elif opcion == "3":
+            consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion=="0":
+            print("Volviendo al menu")
+        else:
+            print("Opción no válida. Intente de nuevo")
 
 def Estadisticas(ListaUsuarios, MatrizResenas, TuplaLineas):
-    print("====Estadisticas====")
-    print("1. Mayor y menor satisfaccion")
-    print("2. Usuario con mejor y peor experiencia")
-    print("3. Lineas mas limpias")
-    print("4. Linea mas reseniada")
-    print("5. Lineas con valoracion critica de espera")
-    print("6. Ranking por categoria")
-    print("7. Top 3 rankings por categoria")
+    opcion=""
+    while opcion!="0":
+        print("====Estadisticas====")
+        print("1. Mayor y menor satisfaccion")
+        print("2. Usuario con mejor y peor experiencia")
+        print("3. Lineas mas limpias")
+        print("4. Linea mas reseniada")
+        print("5. Lineas con valoracion critica de espera")
+        print("6. Ranking por categoria")
+        print("7. Top 3 rankings por categoria")
+        print("0. Volver al menú")
 
-    input("Ingrese una opcion: ")
-    match input:
-        case "1": promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "2": promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas)
-        case "3": lineas_Mas_Limpias(TuplaLineas, MatrizResenas)
-        case "4": linea_Mas_Resenas(TuplaLineas, MatrizResenas)
-        case "5": lineas_Valoracion_Critica(TuplaLineas, MatrizResenas)
-        case "6": ranking_Por_Categoria(TuplaLineas, MatrizResenas)
-        case "7": top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas)
+        opcion=input("Ingrese una opcion: ")
+    
+        if opcion == "1":
+            promedio_Satisfaccion(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion == "2":
+            promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas)
+        elif opcion == "3":
+            lineas_Mas_Limpias(TuplaLineas, MatrizResenas)
+        elif opcion == "4":
+            linea_Mas_Resenas(TuplaLineas, MatrizResenas)
+        elif opcion == "5":
+            lineas_Valoracion_Critica(TuplaLineas, MatrizResenas)
+        elif opcion == "6":
+            ranking_Por_Categoria(TuplaLineas, MatrizResenas)
+        elif opcion == "7":
+            top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas)
+        elif opcion== "0":
+            print("Volviendo al menú")
+        else:
+            print("Opción no válida. Intente nuevamente.")
 
 def agregar_Usuario(listaUsuarios, matrizResenas, tuplaLineas):
     usuario = input("Ingrese el nombre de usuario deseado:")
@@ -251,21 +292,131 @@ def promedio_ExperienciaUsuario(ListaUsuarios, MatrizResenas, TuplaLineas):
     print(f"Usuario con peor experiencia: {usuario_peor[0]} (Promedio: {usuario_peor[1]:.2f})")
 
 def lineas_Mas_Limpias(TuplaLineas, MatrizResenas):
-    # Aca deberia agregarse la logica para calcular las lineas mas limpias
-    pass
+    promedios=[]
+
+    for i in range(len(TuplaLineas)):
+        suma=0
+        cant=0
+        for j in range(len(MatrizResenas)):
+            resena=MatrizResenas[j][i]
+            if resena!=None and resena[0]!=None:
+                suma+=resena[0]
+                cant+=1
+
+        if cant>0:
+            promedios.append(suma/cant)
+        else:
+            promedios.append(-1)
+
+    maxPromedios=max(promedios)
+
+    if maxPromedios==-1:
+        print("No se registraron reseñas de limpieza")    
+
+    else:
+        print(f"--- Línea(s) más limpia(s) (Promedio: {maxPromedios:.2f}) ---")
+        for j in range(len(TuplaLineas)):
+            if promedios[j] == maxPromedios:
+                print(f"- Línea {TuplaLineas[j]}")
 
 def linea_Mas_Resenas(TuplaLineas, MatrizResenas):
-    # Aca deberia agregarse la logica para calcular la linea con mas resenas
-    pass
+    cantidades=[]
+    for i in range(len(TuplaLineas)):
+        cant=0
+
+        for j in range(len(MatrizResenas)):
+            if MatrizResenas[j][i]!=[None,None,None,None] and MatrizResenas[j][i]!=None:
+                cant+=1
+        cantidades.append(cant)
+
+    maxCantidad=max(cantidades)
+
+    if maxCantidad==0:
+        print("No se registraron reseñas")
+    else:
+        print(f"--- Linea(s) con mas reseñas (Cantidad: {maxCantidad}) ---")
+        for j in range(len(TuplaLineas)):
+            if cantidades[j]==maxCantidad:
+                print(f"- Linea {TuplaLineas[j]}")
 
 def lineas_Valoracion_Critica(TuplaLineas, MatrizResenas):
-    # Aca deberia agregarse la logica para calcular las lineas con valoracion critica
-    pass
+    lineasCriticas=[]
+
+    for i in range(len(TuplaLineas)):
+        cant=0
+        cant1=0
+
+        for j in range(len(MatrizResenas)):
+            resena=MatrizResenas[j][i]
+            if resena!=None and resena[1]!=None:
+                cant+=1
+                if resena[1]==1:
+                    cant1+=1
+        if cant>=5:
+            porcentaje=(cant1/cant)*100
+            if porcentaje>75:
+                lineasCriticas.append(TuplaLineas[i])
+
+    if len(lineasCriticas)>0:
+        print(f"Las lineas con valoraciones críticas en espera son:")
+        for r in range(len(lineasCriticas)):
+            print(lineasCriticas[r])
+    else:
+        print("No hay lineas con valoración critica en espera")
+
 
 def ranking_Por_Categoria(TuplaLineas, MatrizResenas):
-    # Aca deberia agregarse la logica para calcular el ranking por categoria
-    pass
+    cat=pedirCategoria()
+    ranking=obtenerDatos(cat,TuplaLineas,MatrizResenas)
+
+    if len(ranking)==0:
+        print("No hay reseñas")
+    else:
+        print("---Ranking Completo---")
+        for i in range(len(ranking)):
+            print(f"{i+1}-Linea: {ranking[i][0]} Promedio: {ranking[i][1]:.2f} Cantidad de reseñas: {ranking[i][2]}")
+
 
 def top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas):
-    # Aca deberia agregarse la logica para calcular el top 3 del ranking por categoria
-    pass
+    cat=pedirCategoria()
+    ranking=obtenerDatos(cat,TuplaLineas,MatrizResenas)
+    if len(ranking)<3:
+        print("No hay suficientes reseñas para hacer un top 3")
+    else:
+        top=ranking[:3]
+        print("---TOP 3---")
+        for i in range(len(top)):
+            print(f"{i+1}- Linea: {top[i][0]} Promedio: {top[i][1]:.2f} Cantidad de reseñas: {top[i][2]}")
+
+
+
+def pedirCategoria():
+    cat=input("Ingrese la categoria (0:Limpeiza, 1:Espera, 2:Ocupación 3:Promedio General):")
+    while not cat.isdigit() or int(cat)<0 or int(cat)>3:
+        print("Opcion no valida, debe ser un numero entre 0 y 3")
+        cat=input("Ingrese la categoria (0:Limpeiza, 1:Espera, 2:Ocupación, 3:Promedio General):")
+    return int(cat)
+
+
+def obtenerDatos(cat,TuplaLineas,MatrizResenas):
+    datos=[]
+
+    for i in range(len(TuplaLineas)):
+        if cat in(0, 1, 2):
+            puntajes=[MatrizResenas[j][i][cat] for j in range(len(MatrizResenas)) if MatrizResenas[j][i]!=None and MatrizResenas[j][i][cat]!=None]
+        else:
+            puntajes = [
+                (MatrizResenas[j][i][0] + MatrizResenas[j][i][1] + MatrizResenas[j][i][2]) / 3
+                for j in range(len(MatrizResenas))
+                if MatrizResenas[j][i] != None and None not in (MatrizResenas[j][i][0], MatrizResenas[j][i][1], MatrizResenas[j][i][2])
+            ]
+
+        cant=len(puntajes)
+
+        if cant>0:
+            promedio=sum(puntajes)/cant
+            datos.append((TuplaLineas[i], promedio, cant))
+
+    datos.sort(key=lambda x: (x[1], x[2]), reverse=True)
+
+    return datos

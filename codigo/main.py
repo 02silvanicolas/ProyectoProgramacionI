@@ -9,19 +9,18 @@ def main():
 
         estado = operaciones.Ver_Menu()
 
-        match estado:
-            case "1":
-                operaciones.Gestionar_Usuarios(datos.usuarios)
-            case "2":
-                operaciones.Gestionar_Resenas(datos.usuarios, datos.resenas, datos.lineas)
-            case "3":
-                operaciones.Consultas(datos.usuarios, datos.resenas, datos.lineas)
-            case "4":
-                operaciones.Estadisticas(datos.usuarios, datos.resenas, datos.lineas)
-            case "5":
-                print("Saliendo del programa...")
-            case _:
-                print("Opcion invalida. Intente nuevamente.")
+        if estado == "1":
+            operaciones.Gestionar_Usuarios(datos.usuarios)
+        elif estado == "2":
+            operaciones.Gestionar_Resenas(datos.usuarios, datos.resenas, datos.lineas)
+        elif estado == "3":
+            operaciones.Consultas(datos.usuarios, datos.resenas, datos.lineas)
+        elif estado == "4":
+            operaciones.Estadisticas(datos.usuarios, datos.resenas, datos.lineas)
+        elif estado == "5":
+            print("Saliendo del programa...")
+        else:
+            print("Opción inválida. Intente nuevamente.")
 
 
 
