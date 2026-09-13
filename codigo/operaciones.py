@@ -11,7 +11,7 @@ def Ver_Menu():
     opcion = input("Ingrese una opcion: ")
     return opcion
 
-def Gestionar_Usuarios(ListaUsuarios):
+def Gestionar_Usuarios(ListaUsuarios, MatrizResenas, TuplaLineas):
     opcion=""
     while opcion!="0":
         print("====Gestion de usuarios====")
@@ -23,7 +23,7 @@ def Gestionar_Usuarios(ListaUsuarios):
         if opcion == "1":
             agregar_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
         elif opcion == "2":
-            buscar_Usuario(ListaUsuarios)
+            buscar_Usuario(ListaUsuarios)   
         elif opcion=="0":
             print("Volviendo al menu")
         else:
@@ -53,7 +53,7 @@ def Gestionar_Resenas(ListaUsuarios, MatrizResenas, TuplaLineas):
 
 def Consultas(ListaUsuarios, MatrizResenas, TuplaLineas):
     opcion=""
-    while opcion!="0"
+    while opcion!="0":
         print("====Consultas====")
         print("1. Consultar resenas por usuario")
         print("2. Consultar resenas por linea")
@@ -64,7 +64,7 @@ def Consultas(ListaUsuarios, MatrizResenas, TuplaLineas):
         if opcion == "1":
             consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas)
         elif opcion == "2":
-            consultar_Resenas_Linea(TuplaLineas, MatrizResenas)
+            consultar_Resenas_Linea(TuplaLineas, MatrizResenas, ListaUsuarios)
         elif opcion == "3":
             consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas)
         elif opcion=="0":
@@ -112,7 +112,7 @@ def agregar_Usuario(listaUsuarios, matrizResenas, tuplaLineas):
     if codigo != -1:
         print("El usuario ya existe. No se puede agregar.")
     else:
-        listaUsuarios.append(usuario)
+        listaUsuarios.append(usuario.upper())
         matrizResenas.append([[] for _ in range(len(tuplaLineas))])
         print("Usuario agregado exitosamente.")
 
@@ -124,7 +124,7 @@ def buscar_Usuario(listaUsuario):
     else:
         print(f"El usuario {usuario} se encuentra en la lista.")
 
-verificarCodigo = lambda buscado, lugar: lugar.index(buscado) if buscado in lugar else -1
+verificarCodigo = lambda buscado, lugar: lugar.index(buscado.upper()) if (buscado.upper()) in lugar else -1
 
 def pedirDatos(pedirUsuario, pedirLinea, ListaUsuarios, TuplaLineas):
 
@@ -163,7 +163,7 @@ def editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
         print("No hay resena para editar.")
         return
     else:
-        print(f"Resena actual: {mostrar_Resena}")
+        print(f"Resena actual: limpieza: {mostrar_Resena[0]}, espera: {mostrar_Resena[1]}, ocupacion: {mostrar_Resena[2]}")
         resena = ingresar_Resena()
         agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena)
     # Aca deberia agregarse la logica para editar la resena en MatrizResenas
@@ -172,20 +172,24 @@ def editar_Resena(ListaUsuarios, MatrizResenas, TuplaLineas):
 
 def ingresar_Resena():
     resena = []
+    validar_Rango = False
 
-    while validar_Rango == False:
+    while not validar_Rango:
+        
         limpieza = int(input("Ingrese la calificacion de Limpieza (1-5): "))
         validar_Rango = 1 <= limpieza <= 5
         if not validar_Rango:
             print("La calificacion debe estar entre 1 y 5. Intente nuevamente.")
 
-    while validar_Rango == False:
+    validar_Rango = False
+    while not validar_Rango:
             espera = int(input("Ingrese la calificacion de Espera (1-5): "))
             validar_Rango = 1 <= espera <= 5
             if not validar_Rango:
                 print("La calificacion debe estar entre 1 y 5. Intente nuevamente.")
 
-    while validar_Rango == False:
+    validar_Rango = False
+    while not validar_Rango:
                 ocupacion = int(input("Ingrese la calificacion de Ocupacion (1-5): "))
                 validar_Rango = 1 <= ocupacion <= 5
                 if not validar_Rango:
@@ -207,35 +211,39 @@ def agregar_Resena_Matriz(MatrizResenas, usuario, linea, resena):
 
 def consultar_Resenas_Usuario(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario = pedirDatos(True, False, ListaUsuarios, TuplaLineas)
-    for i in range(len(MatrizResenas[usuario])):
-        if MatrizResenas[usuario][i] != []:
-            print(f"\nReseñas para la línea {TuplaLineas[i]}:")
-            for r in MatrizResenas[usuario][i]:
-                print(f"  Limpieza: {r[0]}, Espera: {r[1]}, Ocupación: {r[2]}, Comentario: {r[3]}")
+    codigo_usuario = usuario[0]
+    for i in range(len(MatrizResenas[codigo_usuario])):
+        if MatrizResenas[codigo_usuario][i] != []:
+            print(f"\nReseña de {ListaUsuarios[codigo_usuario]} para la línea {TuplaLineas[i]}:")
+            print(f"  Limpieza: {MatrizResenas[codigo_usuario][i][0]}, Espera: {MatrizResenas[codigo_usuario][i][1]}, Ocupación: {MatrizResenas[codigo_usuario][i][2]}, Comentario: {MatrizResenas[codigo_usuario][i][3]}")
         else:
-            print(f"No hay reseñas para la línea {TuplaLineas[i]}.")
+            print(f"No hay reseña de {ListaUsuarios[codigo_usuario]} para la línea {TuplaLineas[i]}.")
             
 
-def consultar_Resenas_Linea(TuplaLineas, MatrizResenas):
+def consultar_Resenas_Linea(TuplaLineas, MatrizResenas, ListaUsuarios):
     linea = pedirDatos(False, True, [], TuplaLineas)
+    linea = linea[0]
     print(f"Resenas para la linea {TuplaLineas[linea]}:")
 
+    cantidad_resenas = 0
+
     for u in range(len(MatrizResenas)):
+        
         if MatrizResenas[u][linea] != []:
-            print(f"\nReseñas de {ListaUsuarios[u]} para la línea {TuplaLineas[linea]}:")
-            for r in MatrizResenas[u][linea]:
-                print(f"  Limpieza: {r[0]}, Espera: {r[1]}, Ocupación: {r[2]}, Comentario: {r[3]}")
-        else:
-            print(f"No hay reseñas de {ListaUsuarios[u]} para la línea {TuplaLineas[linea]}.")
+            cantidad_resenas += 1
+            print(f"\nReseña de {ListaUsuarios[u]} para la línea {TuplaLineas[linea]}:")
+            print(f"  Limpieza: {MatrizResenas[u][linea][0]}, Espera: {MatrizResenas[u][linea][1]}, Ocupación: {MatrizResenas[u][linea][2]}, Comentario: {MatrizResenas[u][linea][3]}")
+
+    if cantidad_resenas == 0:
+                print(f"No hay reseñas para la línea {TuplaLineas[linea]}.")
 
 
 def consultar_Resena_UsuarioLinea(ListaUsuarios, MatrizResenas, TuplaLineas):
     usuario, linea = pedirDatos(True, True, ListaUsuarios, TuplaLineas)
     resena = MatrizResenas[usuario][linea]
     if resena != []:
-        print("Resenas encontradas:")
-        for r in MatrizResenas[usuario][linea]:
-            print(f"Limpieza: {r[0]}, Espera: {r[1]}, Ocupacion: {r[2]}, Comentario: {r[3]}")
+        print("Resena encontradas:")
+        print(f"  Limpieza: {resena[0]}, Espera: {resena[1]}, Ocupacion: {resena[2]}, Comentario: {resena[3]}")
     else:
         print(f"No hay resena de {ListaUsuarios[usuario]} para la linea {TuplaLineas[linea]}.")
 

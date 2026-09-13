@@ -10,7 +10,7 @@ def main():
         estado = operaciones.Ver_Menu()
 
         if estado == "1":
-            operaciones.Gestionar_Usuarios(datos.usuarios)
+            operaciones.Gestionar_Usuarios(datos.usuarios, datos.resenas, datos.lineas)
         elif estado == "2":
             operaciones.Gestionar_Resenas(datos.usuarios, datos.resenas, datos.lineas)
         elif estado == "3":
