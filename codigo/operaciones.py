@@ -113,7 +113,7 @@ def agregar_Usuario(listaUsuarios, matrizResenas, tuplaLineas):
         print("El usuario ya existe. No se puede agregar.")
     else:
         listaUsuarios.append(usuario.upper())
-        matrizResenas.append([[] for _ in range(len(tuplaLineas))])
+        matrizResenas.append([[None, None, None, None] for _ in range(len(tuplaLineas))])
         print("Usuario agregado exitosamente.")
 
 def buscar_Usuario(listaUsuario):
@@ -426,5 +426,4 @@ def obtenerDatos(cat,TuplaLineas,MatrizResenas):
             datos.append((TuplaLineas[i], promedio, cant))
 
     datos.sort(key=lambda x: (x[1], x[2]), reverse=True)
-
     return datos
