@@ -389,7 +389,7 @@ def top3_Ranking_Por_Categoria(TuplaLineas, MatrizResenas):
     cat=pedirCategoria()
     ranking=obtenerDatos(cat,TuplaLineas,MatrizResenas)
     if len(ranking)<3:
-        print("No hay suficientes reseñas para hacer un top 3")
+        print("No hay suficientes reseñas para hacer un top 3") 
     else:
         top=ranking[:3]
         print("---TOP 3---")
