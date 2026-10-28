@@ -42,54 +42,47 @@ def Iniciar_Sesion():
         print("Error: Usuario o contraseña incorrectos.")
         return None
 
-
 def Registrar_Usuario():
-    
-    usuarios_existentes = []
-    try:
-        archivo = open("usuarios.csv", "r", encoding="utf-8")
-    except IOError:
-        # Si el archivo no existe aún, la lista queda vacía y continuará normalmente
-        pass
-    else:
-        for linea in archivo:
-            datos = linea.strip().split(",")
-            if len(datos) > 0 and datos[0]:
-                usuarios_existentes.append(datos[0])
-        archivo.close()
 
-    usuario_valido = False
-    while not usuario_valido:
-        usuario = input("Ingrese nuevo usuario (solo letras y números, sin espacios): ")
-        
-        # Validar formato con Regex
-        if not re.match(r"[a-zA-Z0-9]+", usuario):
-            print("Error: El usuario solo puede contener letras y números, sin espacios.")
-            continue  # Vuelve a pedir el usuario
+    try:
+            archivo = open("usuarios.csv", "a+")
+    except IOError:
+        print("Error: No se pudo acceder al archivo de usuarios.")
+        return
+    else:
+        usuario_valido = False
+        while not usuario_valido:
+            usuario = input("Ingrese nuevo usuario (solo letras y números, sin espacios): ")
             
-        if usuario in usuarios_existentes:
-            print("Error: El usuario ya se encuentra registrado.")
-        else:
-            usuario_valido = True
+            # Validar formato con Regex estricto (inicio ^ y fin $)
+            if not re.match(r"^[a-zA-Z0-9]+$", usuario):
+                print("Error: El usuario solo puede contener letras y números, sin espacios.")
+                continue
 
-    password_valida = False
-    while not password_valida:
-        password = input("Ingrese contraseña (mínimo 6 caracteres, SOLO letras y números): ")
-        
-        if re.match(r"[A-Za-z0-9]{6,}", password):
-            password_valida = True
-        else:
-            print("Error: La contraseña debe tener al menos 6 caracteres y solo puede contener letras y números.")
+            archivo.seek(0)
+            
+            for linea in archivo:
+                datos = linea.strip().split(",")
+                if len(datos) > 0 and datos[0] == usuario:
+                    print("Error: El usuario ya se encuentra registrado.")
+                    break
+            else:
+                usuario_valido = True
 
-    try:
-        archivo_escritura = open("usuarios.csv", "a", encoding="utf-8")
-    except IOError:
-        print("Error: No se pudo guardar el usuario en el archivo.")
-    else:
-        archivo_escritura.write(f"{usuario},{password}\n")
-        archivo_escritura.close()
+        password_valida = False
+        while not password_valida:
+            password = input("Ingrese contraseña (mínimo 6 caracteres, SOLO letras y números): ")
+            
+            # Validar formato con Regex estricto (inicio ^ y fin $)
+            if re.match(r"^[A-Za-z0-9]{6,}$", password):
+                password_valida = True
+            else:
+                print("Error: La contraseña debe tener al menos 6 caracteres y solo puede contener letras y números.")
+
+        archivo.write(f"{usuario},{password}\n")
+        archivo.close()
         print("Usuario registrado exitosamente. Ahora puede iniciar sesión.")
-
+            
 
 def Ver_Menu():
     print("\n==== Menú Principal Subtexd ====")
