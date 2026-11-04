@@ -26,7 +26,7 @@ def main():
         print("Saliendo del programa...")
         return
 
-    estado = 0
+    estado = "0"
 
     while estado != "4":
         estado = operaciones.Ver_Menu()
@@ -34,13 +34,11 @@ def main():
         if estado == "1":
             operaciones.Gestionar_Resenas(usuario_actual, conjunto_lineas)
         elif estado == "2":
-            # Para el paso 3 (Consultas)
             operaciones.Consultas(usuario_actual, conjunto_lineas)
         elif estado == "3":
-            # Para el paso 4 (Estadísticas)
-            operaciones.Estadisticas(usuario_actual, conjunto_lineas)
+            operaciones.Estadisticas(conjunto_lineas)
         elif estado == "4":
-            print("Cerrando sesión y saliendo del programa...")
+            print("Cerrando sesión y saliendo de Subtexd...")
         else:
             print("Opción inválida. Intente nuevamente.")
 
