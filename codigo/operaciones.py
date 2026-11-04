@@ -372,20 +372,17 @@ def consultar_Resenas_Linea_CSV(conjunto_lineas):
 def Estadisticas(conjunto_lineas):
     print("\n==== Estadísticas y Generación de Reporte ====")
     
-    # Estructura acumuladora por línea
-    # Guardaremos listas o contadores específicos para evaluar cada regla de la Etapa 2
     estadisticas = {}
     for linea in conjunto_lineas:
         estadisticas[linea] = {
-            "limpieza_altas": 0,      # Cantidad de 4 o 5 estrellas en limpieza
+            "limpieza_altas": 0,     
             "espera_total": 0,
             "limpieza_total": 0,
             "ocupacion_total": 0,
             "total_reseñas": 0,
-            "espera_1_estrella": 0    # Cantidad exacta de 1 estrella en espera (para el crítico >75%)
+            "espera_1_estrella": 0    
         }
         
-    # Leemos el archivo de registros
     try:
         archivo = open("registros.csv", "r", encoding="utf-8")
     except IOError:
@@ -395,7 +392,6 @@ def Estadisticas(conjunto_lineas):
         for fila in archivo:
             datos = fila.strip().split(",")
             
-            # Saltamos la cabecera
             if len(datos) >= 6 and datos[0] != "usuario":
                 linea = datos[1]
                 
@@ -404,33 +400,26 @@ def Estadisticas(conjunto_lineas):
                     limpieza = int(datos[3])
                     ocupacion = int(datos[4])
                     
-                    # Acumulamos valores generales
                     estadisticas[linea]["espera_total"] += espera
                     estadisticas[linea]["limpieza_total"] += limpieza
                     estadisticas[linea]["ocupacion_total"] += ocupacion
                     estadisticas[linea]["total_reseñas"] += 1
                     
-                    # Criterio 1: Líneas más limpias (4 o 5 estrellas en limpieza)
+                   
                     if limpieza >= 4:
                         estadisticas[linea]["limpieza_altas"] += 1
                         
-                    # Criterio 2: Valoración crítica de espera (1 estrella)
                     if espera == 1:
                         estadisticas[linea]["espera_1_estrella"] += 1
                         
         archivo.close()
         
-    # Procesamiento de Indicadores
-    
-    # A. Líneas más limpias
-    # Ordenamos de mayor a menor según la cantidad de valoraciones altas de limpieza
     lineas_limpias_ordenadas = sorted(
         estadisticas.keys(), 
         key=lambda l: estadisticas[l]["limpieza_altas"], 
         reverse=True
     )
-    
-    # B. Líneas con valoración crítica de espera (>75% de 1 estrella con mínimo 5 reseñas)
+
     lineas_criticas_espera = []
     for linea in estadisticas:
         cant = estadisticas[linea]["total_reseñas"]
@@ -439,7 +428,6 @@ def Estadisticas(conjunto_lineas):
             if porcentaje_unos > 75:
                 lineas_criticas_espera.append((linea, porcentaje_unos))
                 
-    # C. Top 3 de valoración general (Ordenados de mayor a menor promedio general, usando slicing [:3])
     promedios_generales = []
     for linea in estadisticas:
         cant = estadisticas[linea]["total_reseñas"]
@@ -450,11 +438,8 @@ def Estadisticas(conjunto_lineas):
             prom_general = (p_esp + p_lim + p_ocu) / 3
             promedios_generales.append((linea, prom_general))
             
-    # Ordenamos de mayor a menor promedio
     promedios_generales.sort(key=lambda x: x[1], reverse=True)
-    top_3 = promedios_generales[:3] # Aplicamos slicing estricto requerido por el PDF
-    
-    # Generación y exportación del reporte a archivo de texto
+    top_3 = promedios_generales[:3]
     try:
         archivo_reporte = open("reporte.txt", "w", encoding="utf-8")
     except IOError:
