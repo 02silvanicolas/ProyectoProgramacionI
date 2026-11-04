@@ -111,26 +111,13 @@ def Gestionar_Resenas(usuario_actual, TuplaLineas):
         else:
             print("Opción no válida. Intente nuevamente.")
 
+
 def pedirLinea(TuplaLineas):
     linea = input("Ingrese el nombre de la línea: ").upper()
     while linea not in TuplaLineas:
         print("La línea no existe o no es válida.")
         linea = input("Ingrese el nombre de la línea nuevamente: ").upper()
     return linea
-
-def existe_Resena(usuario, linea):
-    try:
-        archivo = open("registros.csv", "r")
-    except IOError:
-        return False
-    else:
-        for fila in archivo:
-            datos = fila.strip().split(",")
-            if len(datos) >= 2 and datos[0] == usuario and datos[1] == linea:
-                archivo.close()
-                return True
-        archivo.close()
-        return False
 
 def ingresar_Resena():
 
@@ -175,96 +162,130 @@ def ingresar_Resena():
     
     return diccionario_resena
 
+def existe_Resena(usuario, linea, resenas_memoria):
+
+    if linea in resenas_memoria and usuario in resenas_memoria[linea]:
+        return True
+    return False
+
+
 def agregar_Resena_CSV(usuario_actual, conjunto_lineas):
-
     linea = pedirLinea(conjunto_lineas)
-    
-    if existe_Resena(usuario_actual, linea):
-        print(f"Error: Ya has realizado una reseña para la línea {linea}. Utiliza la opción de editar.")
-        return
-
-    print(f"\n--- Nueva reseña para la línea {linea} ---")
-    resena = ingresar_Resena() 
-    
+    resenas = {}
     archivo_nuevo = False
-
+    
     try:
-        archivo_prueba = open("registros.csv", "r")
+        archivo = open("registros.csv", "r+")
     except IOError:
         archivo_nuevo = True
     else:
-        archivo_prueba.close()
-        
-    try:
-        archivo_escritura = open("registros.csv", "a")
-    except IOError:
-        print("Error: No se pudo guardar la reseña.")
-    else:
-        if archivo_nuevo:
-            archivo_escritura.write("usuario,linea,espera,limpieza,ocupacion,comentario\n")
-        
-        archivo_escritura.write(f"{usuario_actual},{linea},{resena['espera']},{resena['limpieza']},{resena['ocupacion']},{resena['comentario']}\n")
-        archivo_escritura.close()
-        print("Reseña guardada exitosamente.")
-
-def editar_Resena_CSV(usuario_actual, conjunto_lineas):
-    linea = pedirLinea(conjunto_lineas)
-    
-    if not existe_Resena(usuario_actual, linea):
-        print(f"Error: No tienes ninguna reseña registrada para la línea {linea}.")
-        return
-
-    registros_actualizados = []
-    editado = False
-    
-    try:
-        archivo = open("registros.csv", "r")
-    except IOError:
-        print("Error al leer el archivo para edición.")
-        return
-    else:
         for fila in archivo:
             datos = fila.strip().split(",")
-            
-            if len(datos) >= 6 and datos[0] == "usuario" and datos[1] == "linea":
-                registros_actualizados.append(fila)
-                continue
-
-            if len(datos) >= 6:
-                registro_dicc = {
-                    "usuario": datos[0],
-                    "linea": datos[1],
+            if len(datos) >= 6 and datos[0] != "usuario":
+                usr = datos[0]
+                lin = datos[1]
+                
+                if lin not in resenas:
+                    resenas[lin] = {}
+                    
+                resenas[lin][usr] = {
                     "espera": datos[2],
                     "limpieza": datos[3],
                     "ocupacion": datos[4],
                     "comentario": datos[5]
                 }
+                
+    if not archivo_nuevo and existe_Resena(usuario_actual, linea, resenas):
+        print(f"Error: Ya has realizado una reseña para la línea {linea}. Utiliza la opción de editar.")
+        archivo.close()
+        return
 
-                if registro_dicc["usuario"] == usuario_actual and registro_dicc["linea"] == linea:
-                    print(f"\nReseña actual - Espera: {registro_dicc['espera']}, Limpieza: {registro_dicc['limpieza']}, Ocupación: {registro_dicc['ocupacion']}, Comentario: {registro_dicc['comentario']}")
-                    print("--- Ingresa los nuevos valores ---")
+    print(f"\n--- Nueva reseña para la línea {linea} ---")
+    nueva_resena = ingresar_Resena()
+
+    if linea not in resenas:
+        resenas[linea] = {}
+        
+    resenas[linea][usuario_actual] = {
+        "espera": str(nueva_resena["espera"]),
+        "limpieza": str(nueva_resena["limpieza"]),
+        "ocupacion": str(nueva_resena["ocupacion"]),
+        "comentario": nueva_resena["comentario"]
+    }
+
+    if archivo_nuevo:
+        try:
+            archivo = open("registros.csv", "w+")
+        except IOError:
+            print("Error: No se pudo crear el archivo de registros.")
+            return
+
+    archivo.seek(0)
+    archivo.truncate()
+    archivo.write("usuario,linea,espera,limpieza,ocupacion,comentario\n")
+    
+    for lin in resenas:
+        for usr in resenas[lin]:
+            datos_resena = resenas[lin][usr]
+            archivo.write(f"{usr},{lin},{datos_resena['espera']},{datos_resena['limpieza']},{datos_resena['ocupacion']},{datos_resena['comentario']}\n")
+            
+    archivo.close()
+    print("Reseña guardada exitosamente.")
+
+
+def editar_Resena_CSV(usuario_actual, conjunto_lineas):
+    linea = pedirLinea(conjunto_lineas)
+    resenas = {}
+    
+    try:
+        archivo = open("registros.csv", "r+")
+    except IOError:
+        print("Error: El archivo de registros no existe. No hay reseñas para editar.")
+        return
+    else:
+        for fila in archivo:
+            datos = fila.strip().split(",")
+            if len(datos) >= 6 and datos[0] != "usuario":
+                usr = datos[0]
+                lin = datos[1]
+                
+                if lin not in resenas:
+                    resenas[lin] = {}
                     
-                    nueva_resena = ingresar_Resena()
-                    
-                    fila_nueva = f"{usuario_actual},{linea},{nueva_resena['espera']},{nueva_resena['limpieza']},{nueva_resena['ocupacion']},{nueva_resena['comentario']}\n"
-                    registros_actualizados.append(fila_nueva)
-                    editado = True
-                else:
-                    registros_actualizados.append(fila)
-            else:
-                registros_actualizados.append(fila)
+                resenas[lin][usr] = {
+                    "espera": datos[2],
+                    "limpieza": datos[3],
+                    "ocupacion": datos[4],
+                    "comentario": datos[5]
+                }
+                
+        if not existe_Resena(usuario_actual, linea, resenas):
+            print(f"Error: No tienes ninguna reseña registrada para la línea {linea}.")
+            archivo.close()
+            return
+            
+        actual = resenas[linea][usuario_actual]
+        print(f"\nReseña actual - Espera: {actual['espera']}, Limpieza: {actual['limpieza']}, Ocupación: {actual['ocupacion']}, Comentario: {actual['comentario']}")
+        print("--- Ingresa los nuevos valores ---")
+        
+        nueva_resena = ingresar_Resena()
+        
+        # Modificamos directamente en el diccionario anidado en memoria
+        resenas[linea][usuario_actual] = {
+            "espera": str(nueva_resena["espera"]),
+            "limpieza": str(nueva_resena["limpieza"]),
+            "ocupacion": str(nueva_resena["ocupacion"]),
+            "comentario": nueva_resena["comentario"]
+        }
+        
+        archivo.seek(0)
+        archivo.truncate()
+        archivo.write("usuario,linea,espera,limpieza,ocupacion,comentario\n")
+        
+        for lin in resenas:
+            for usr in resenas[lin]:
+                datos_resena = resenas[lin][usr]
+                archivo.write(f"{usr},{lin},{datos_resena['espera']},{datos_resena['limpieza']},{datos_resena['ocupacion']},{datos_resena['comentario']}\n")
                 
         archivo.close()
-
-    if editado:
-        try:
-            archivo_escritura = open("registros.csv", "w")
-        except IOError:
-            print("Error al reescribir el archivo de registros.")
-        else:
-            for registro in registros_actualizados:
-                if not registro.endswith("\n"):
-                    registro += "\n"
-                archivo_escritura.write(registro)
-            archivo_escritura.close()
-            print("Reseña editada y archivo actualizado exitosamente.")
+        print("Reseña editada y archivo actualizado exitosamente.")
