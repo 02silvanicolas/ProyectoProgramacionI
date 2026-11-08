@@ -46,40 +46,48 @@ def Iniciar_Sesion():
 
 
 def Registrar_Usuario():
-    try:
-        archivo = open("usuarios.csv", "a+")
-    except IOError:
-        print("Error: No se pudo acceder al archivo de usuarios.")
-        return
-    else:
-        usuario_valido = False
-        while not usuario_valido:
-            usuario = input("Ingrese nuevo usuario (solo letras y números, sin espacios): ")
-            
-            # Validar formato con Regex estricto (inicio ^ y fin $)
-            if not re.match(r"^[a-zA-Z0-9]+$", usuario):
-                print("Error: El usuario solo puede contener letras y números, sin espacios.")
-                continue
+    usuario_valido = False
+    while not usuario_valido:
+        usuario = input("Ingrese nuevo usuario (solo letras y números, sin espacios): ")
+        
+        if not re.match(r"^[a-zA-Z0-9]+$", usuario):
+            print("Error: El usuario solo puede contener letras y números, sin espacios.")
+            continue
 
-            archivo.seek(0)
-            
+        usuario_existe = False
+        try:
+            archivo = open("usuarios.csv", "r")
+        except IOError:
+            print("No se encontró el archivo de usuarios. Se creará uno nuevo al registrar el usuario.")
+            usuario_existe = False
+        else:
             for linea in archivo:
                 datos = linea.strip().split(",")
                 if len(datos) > 0 and datos[0].lower() == usuario.lower():
-                    print("Error: El usuario ya se encuentra registrado.")
+                    usuario_existe = True
                     break
-            else:
-                usuario_valido = True
+            archivo.close()
 
-        password_valida = False
-        while not password_valida:
-            password = input("Ingrese contraseña (mínimo 6 caracteres, SOLO letras y números): ")
-            
-            if re.match(r"^[A-Za-z0-9]{6,}$", password):
-                password_valida = True
-            else:
-                print("Error: La contraseña debe tener al menos 6 caracteres y solo puede contener letras y números.")
+        if usuario_existe:
+            print("Error: El usuario ya se encuentra registrado.")
+        else:
+            usuario_valido = True
 
+    password_valida = False
+    while not password_valida:
+        password = input("Ingrese contraseña (mínimo 6 caracteres, SOLO letras y números): ")
+        
+        if re.match(r"^[A-Za-z0-9]{6,}$", password):
+            password_valida = True
+        else:
+            print("Error: La contraseña debe tener al menos 6 caracteres y solo puede contener letras y números.")
+
+    try:
+        archivo = open("usuarios.csv", "a")
+    except IOError:
+        print("Error: No se pudo acceder al archivo de usuarios para guardar el registro.")
+        return
+    else:
         archivo.write(f"{usuario},{password}\n")
         archivo.close()
         print("Usuario registrado exitosamente. Ahora puede iniciar sesión.")
@@ -181,9 +189,10 @@ def ingresar_Resena():
     return diccionario_resena
 
 def existe_Resena(usuario, linea, resenas_memoria):
-
-    if linea in resenas_memoria and usuario in resenas_memoria[linea]:
-        return True
+    if linea in resenas_memoria:
+        for usr in resenas_memoria[linea]:
+            if usr.lower() == usuario.lower():
+                return True
     return False
 
 def agregar_Resena_CSV(usuario_actual, conjunto_lineas):
@@ -200,7 +209,7 @@ def agregar_Resena_CSV(usuario_actual, conjunto_lineas):
             datos = fila.strip().split(",")
             if len(datos) >= 6 and datos[0] != "usuario":
                 usr = datos[0]
-                lin = datos[1]
+                lin = datos[1].upper()
                 
                 if lin not in resenas:
                     resenas[lin] = {}
@@ -263,7 +272,7 @@ def editar_Resena_CSV(usuario_actual, conjunto_lineas):
             datos = fila.strip().split(",")
             if len(datos) >= 6 and datos[0] != "usuario":
                 usr = datos[0]
-                lin = datos[1]
+                lin = datos[1].upper()
                 
                 if lin not in resenas:
                     resenas[lin] = {}
@@ -432,10 +441,8 @@ def Estadisticas(conjunto_lineas):
     for linea in estadisticas:
         cant = estadisticas[linea]["total_reseñas"]
         if cant > 0:
-            p_esp = estadisticas[linea]["espera_total"] / cant
-            p_lim = estadisticas[linea]["limpieza_total"] / cant
-            p_ocu = estadisticas[linea]["ocupacion_total"] / cant
-            prom_general = (p_esp + p_lim + p_ocu) / 3
+            suma_total_estrellas = estadisticas[linea]["espera_total"] + estadisticas[linea]["limpieza_total"] + estadisticas[linea]["ocupacion_total"]
+            prom_general = suma_total_estrellas / (cant * 3)
             promedios_generales.append((linea, prom_general))
             
     promedios_generales.sort(key=lambda x: x[1], reverse=True)
