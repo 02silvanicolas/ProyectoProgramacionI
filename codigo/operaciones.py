@@ -423,11 +423,17 @@ def Estadisticas(conjunto_lineas):
                         
         archivo.close()
         
-    lineas_limpias_ordenadas = sorted(
-        estadisticas.keys(), 
-        key=lambda l: estadisticas[l]["limpieza_altas"], 
-        reverse=True
-    )
+    max_limpieza = 0
+    for linea in estadisticas:
+        if estadisticas[linea]["limpieza_altas"] > max_limpieza:
+            max_limpieza = estadisticas[linea]["limpieza_altas"]
+
+    lineas_mas_limpias = []
+    if max_limpieza > 0:
+        for linea in estadisticas:
+            if estadisticas[linea]["limpieza_altas"] == max_limpieza:
+                lineas_mas_limpias.append(linea)
+        lineas_mas_limpias.sort()
 
     lineas_criticas_espera = []
     for linea in estadisticas:
@@ -456,15 +462,21 @@ def Estadisticas(conjunto_lineas):
         print(f"\n{titulo}")
         archivo_reporte.write(f"{titulo}\n\n")
         
-        texto_limpieza = "-- 1. Lineas mas limpias (Valoraciones de 4 o 5 estrellas) --"
+        texto_limpieza = "-- 1. Lineas mas limpias (Mayor cantidad de valoraciones de 4 o 5 estrellas) --"
         print(f"\n{texto_limpieza}")
         archivo_reporte.write(texto_limpieza + "\n")
-        for l in lineas_limpias_ordenadas:
-            altas = estadisticas[l]["limpieza_altas"]
-            t_res = estadisticas[l]["total_reseñas"]
-            linea_txt = f"Linea {l}: {altas} valoracion(es) altas (sobre {t_res} reseñas totales)"
-            print(linea_txt)
-            archivo_reporte.write(linea_txt + "\n")
+        
+        if lineas_mas_limpias:
+            for l in lineas_mas_limpias:
+                altas = estadisticas[l]["limpieza_altas"]
+                t_res = estadisticas[l]["total_reseñas"]
+                linea_txt = f"Linea {l}: {altas} valoracion(es) altas (sobre {t_res} reseñas totales)"
+                print(linea_txt)
+                archivo_reporte.write(linea_txt + "\n")
+        else:
+            msg_nl = "Aún no hay líneas con valoraciones altas de limpieza (4 o 5 estrellas)."
+            print(msg_nl)
+            archivo_reporte.write(msg_nl + "\n")
             
         texto_criticas = "\n-- 2. Lineas con valoracion critica de espera (>75% de 1 estrella, min. 5 reseñas) --"
         print(texto_criticas)
