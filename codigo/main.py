@@ -1,3 +1,4 @@
+import re
 import operaciones
 
 def main():
@@ -8,10 +9,17 @@ def main():
             for linea in archivo:
                 datos = linea.strip().split(",")
                 for dato in datos:
-                    if dato.strip() != "":
-                        conjunto_lineas.add(dato.strip().upper())
-    except IOError:
+                    codigo = dato.strip().upper()
+                    if codigo != "":
+                        if re.fullmatch(r"[A-Z0-9]{1,10}", codigo):
+                            conjunto_lineas.add(codigo)
+                        else:
+                            print(f"Advertencia: Se omitió una línea inválida en 'configuracion.txt': '{codigo}'.")
+    except FileNotFoundError:
         print("Error: No se encontró el archivo 'configuracion.txt'.")
+        return
+    except (IOError, UnicodeDecodeError):
+        print("Error: No se pudo leer 'configuracion.txt' por un problema de acceso o codificación.")
         return
 
     if not conjunto_lineas:
@@ -19,16 +27,13 @@ def main():
         return
 
     usuario_actual = operaciones.Menu_Autenticacion()
-    
     if not usuario_actual:
         print("Saliendo del programa...")
         return
 
     estado = "0"
-
     while estado != "4":
         estado = operaciones.Ver_Menu()
-
         if estado == "1":
             operaciones.Gestionar_Resenas(usuario_actual, conjunto_lineas)
         elif estado == "2":
