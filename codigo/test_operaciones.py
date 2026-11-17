@@ -24,10 +24,12 @@ def test_regex_usuario_valido():
     assert re.match(patron_usuario, "martin s") is None
 
 def test_regex_contrasena_valida():
-    patron_password = r"^[A-Za-z0-9]{6,}$"
+    patron_password = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,}$"
     assert re.match(patron_password, "clave123") is not None
     assert re.match(patron_password, "abc1") is None
-
+    assert re.match(patron_password, "sololetras") is None
+    assert re.match(patron_password, "1234567") is None
+    
 def test_calculo_promedio_general_formula():
     espera_total = 8
     limpieza_total = 6
