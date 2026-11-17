@@ -1,5 +1,4 @@
-import re
-from operaciones import existe_Resena
+from operaciones import existe_Resena, validar_usuario, validar_contrasena
 
 def test_existe_Resena_positivo():
     resenas_memoria = {
@@ -19,16 +18,15 @@ def test_existe_Resena_negativo():
     assert existe_Resena("martin", "B", resenas_memoria) == False
 
 def test_regex_usuario_valido():
-    patron_usuario = r"^[a-zA-Z0-9]+$"
-    assert re.match(patron_usuario, "Martin123") is not None
-    assert re.match(patron_usuario, "martin s") is None
+    assert validar_usuario("Martin123") == True
+    assert validar_usuario("martin s") == False
+    assert validar_usuario("martin_1") == False
 
 def test_regex_contrasena_valida():
-    patron_password = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,}$"
-    assert re.match(patron_password, "clave123") is not None
-    assert re.match(patron_password, "abc1") is None
-    assert re.match(patron_password, "sololetras") is None
-    assert re.match(patron_password, "1234567") is None
+    assert validar_contrasena("clave123") == True
+    assert validar_contrasena("abc1") == False
+    assert validar_contrasena("sololetras") == False
+    assert validar_contrasena("1234567") == False
     
 def test_calculo_promedio_general_formula():
     espera_total = 8
@@ -39,6 +37,4 @@ def test_calculo_promedio_general_formula():
     suma_total_estrellas = espera_total + limpieza_total + ocupacion_total
     prom_general = suma_total_estrellas / (cant * 3)
     
-    # En lugar de round(), si querés verificar que el resultado sea aproximadamente 
-    # el esperado sin lidiar con los decimales infinitos de punto flotante:
     assert 3.66 < prom_general < 3.68

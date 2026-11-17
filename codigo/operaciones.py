@@ -3,12 +3,12 @@ import re
 def validar_usuario(usuario):
     if not isinstance(usuario, str):
         return False
-    return re.fullmatch(r"[a-zA-Z0-9]{3,20}", usuario) is not None
+    return re.fullmatch(r"[a-zA-Z0-9]+", usuario) is not None
 
 def validar_contrasena(password):
     if not isinstance(password, str):
         return False
-    return re.fullmatch(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,20}", password) is not None
+    return re.fullmatch(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,}", password) is not None
 
 def leer_usuarios_CSV():
     usuarios = {}
@@ -66,12 +66,12 @@ def Menu_Autenticacion():
 def Iniciar_Sesion():
     usuario = input("Ingrese su usuario: ")
     if not validar_usuario(usuario):
-        print("Error: Formato de usuario inválido (3 a 20 caracteres, solo letras y números, sin espacios).")
+        print("Error: Formato de usuario inválido (solo letras y números, sin espacios).")
         return None
 
     password = input("Ingrese su contraseña: ")
     if not validar_contrasena(password):
-        print("Error: Formato de contraseña inválido (6 a 20 caracteres, con letras y números).")
+        print("Error: Formato de contraseña inválido (mínimo 6 caracteres, con letras y números).")
         return None
 
     usuarios, archivo_existe, _, _ = leer_usuarios_CSV()
@@ -98,9 +98,9 @@ def Registrar_Usuario():
 
     usuario_valido = False
     while not usuario_valido:
-        usuario = input("Ingrese nuevo usuario (3 a 20 caracteres, solo letras y números, sin espacios): ")
+        usuario = input("Ingrese nuevo usuario (solo letras y números, sin espacios): ")
         if not validar_usuario(usuario):
-            print("Error: El usuario debe tener entre 3 y 20 caracteres alfanuméricos, sin espacios.")
+            print("Error: El usuario solo puede contener letras y números, sin espacios.")
             continue
 
         if usuario.lower() in usuarios:
@@ -110,11 +110,11 @@ def Registrar_Usuario():
 
     password_valida = False
     while not password_valida:
-        password = input("Ingrese contraseña (6 a 20 caracteres, con letras y números): ")
+        password = input("Ingrese contraseña (mínimo 6 caracteres, con letras y números): ")
         if validar_contrasena(password):
             password_valida = True
         else:
-            print("Error: La contraseña debe tener entre 6 y 20 caracteres e incluir letras y números (sin símbolos ni espacios).")
+            print("Error: La contraseña debe tener al menos 6 caracteres e incluir letras y números (sin símbolos ni espacios).")
 
     try:
         modo = "a" if archivo_existe else "w"
